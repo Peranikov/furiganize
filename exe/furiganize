@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require "furiganize"
+require "optparse"
+
+params = ARGV.getopts('vh', 'appid:', 'grade:1')
+
+yahoo_app_id = params["a"] || params["appid"]
+grade = params["g"] || params["grade"]
+verbose = params["v"]
+help = params["h"]
+
+if File.pipe?(STDIN) || File.select([STDIN], [], [], 0) != nil
+  sentence = STDIN.gets
+else
+  sentence = ARGV[0]
+end
+
+if help || (!yahoo_app_id || !grade || !sentence)
+  puts <<"EOS"
+Usage:
+  Furiganize [Options] sentence
+
+Options
+  -a, [--appid] # Specified your Yahoo App ID. see also: http://developer.yahoo.co.jp/start/
+  -g, [--grade] # Specified japan elementary school grade
+  -v            # Verbose
+
+SEE ALSO
+  http://developer.yahoo.co.jp/webapi/jlp/furigana/v1/furigana.html
+EOS
+exit
+end
+
+if verbose
+  puts <<"EOS"
+yahoo_app_id: #{yahoo_app_id}
+grade: #{grade}
+sentence: #{sentence}
+EOS
+end
+
+doc = Furiganize::YahooFuriganaService.new(yahoo_app_id, grade, sentence).fetch
+puts doc.css("Word").map {|w| w.at_css("Furigana") || w.at_css("Surface") }.map(&:text).join
