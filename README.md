@@ -19,7 +19,7 @@ $ furiganize -h
 Basic usage
 
 ```
-$ furiganize -a [YOUR_YAHOO_APP_ID] -g 3 -v  -h '小学三年生が書いたこの文章は魑魅魍魎' # => 小学三年生が書いたこのぶんしょうはちみもうりょう
+$ furiganize -a [YOUR_YAHOO_APP_ID] -g 3 '小学三年生が書いたこの文章は魑魅魍魎' # => 小学三年生が書いたこのぶんしょうはちみもうりょう
 ```
 
 or, you can use stdin.
